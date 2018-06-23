@@ -13,10 +13,9 @@ public class ActionsController : MonoBehaviour, InputController.ClickListener
 	public Button m_cancelButton;
 	public Color m_normalColor;
 	public Color m_activeColor;
-	public float m_moveSpeed;
 	public GameObject m_inputControllerObj;
 	private InputController m_inputController;
-	private IList<GameObject> m_selectedUnits = new List<GameObject>();
+	private List<GameObject> m_selectedUnits = new List<GameObject>();
 	private bool m_moveActionActive;
 	private Vector3 m_destination = Vector3.zero;
 
@@ -30,17 +29,18 @@ public class ActionsController : MonoBehaviour, InputController.ClickListener
 
 	private void Update()
 	{
+		RemoveDestroyed();
 		if (m_destination != Vector3.zero)
 		{
 			foreach (var unit in m_selectedUnits)
 			{
+				
 				NavMeshAgent agent = unit.GetComponent<NavMeshAgent>();
 				if (agent.isStopped)
 				{
 					continue;
 				}
 				var dist = Vector3.Distance(unit.transform.position, m_destination);
-				Debug.Log(dist);
 				if (dist < 0.8f)
 				{
 					agent.isStopped = true;
@@ -48,6 +48,11 @@ public class ActionsController : MonoBehaviour, InputController.ClickListener
 			}
 		}
 		
+	}
+
+	void RemoveDestroyed()
+	{
+		m_selectedUnits.RemoveAll((obj) => { return obj == null; });
 	}
 
 	public void AddSelectedUnit(GameObject unit)

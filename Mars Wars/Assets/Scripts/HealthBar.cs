@@ -10,9 +10,9 @@ public class HealthBar : MonoBehaviour
 	public int m_height;
 	public Texture2D m_texture;
 
-	UnitController m_parent;
+	Unit m_parent;
 	Vector2 m_position;
-	public void SetParent(UnitController parent)
+	public void SetParent(Unit parent)
 	{
 		m_parent = parent;
 	}
@@ -22,12 +22,12 @@ public class HealthBar : MonoBehaviour
 	}
 	void Update()
 	{
-		
+
 	}
 
 	void LateUpdate()
 	{
-		
+
 	}
 
 	void OnGUI()
@@ -36,11 +36,18 @@ public class HealthBar : MonoBehaviour
 		{
 			return;
 		}
-		Vector3 vec3 = Camera.main.WorldToScreenPoint(m_parent.transform.position);
+		Vector3 vec3 = Camera.main.WorldToScreenPoint(m_parent.GetTransform().position);
 		m_position.x = vec3.x - m_width / 2;
 		m_position.y = Screen.height - vec3.y - m_verticalOffset;
 		GUIStyle style = new GUIStyle();
 		style.stretchWidth = true;
 		GUI.Box(new Rect(m_position.x, m_position.y, m_width, m_height), m_texture, style);
+	}
+
+	public interface Unit
+	{
+		float GetHealth();
+		void DecreaseHealth(float damage);
+		Transform GetTransform();
 	}
 }

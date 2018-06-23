@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour, InputController.ClickListener, ActionsController.DeselectListener
+public class UnitController : MonoBehaviour, InputController.ClickListener, ActionsController.DeselectListener, HealthBar.Unit
 {
 	public GameObject m_healthBarPrefab;
 	public GameObject m_actionsControllerObj;
@@ -57,8 +57,17 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		m_health -= damage;
 		if (m_health <= 0)
 		{
-			Destroy(m_healthBar);
 			Destroy(gameObject);
 		}
+	}
+
+	public Transform GetTransform()
+	{
+		return transform;
+	}
+
+	private void OnDestroy()
+	{
+		Destroy(m_healthBar);
 	}
 }
