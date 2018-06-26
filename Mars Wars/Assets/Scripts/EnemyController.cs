@@ -5,10 +5,14 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour, HealthBar.Unit
 {
 	public GameObject m_healthBarPrefab;
+	public float m_damage;
+	public float m_cooldown;
 
 	private float m_health = 100f;
 	Rigidbody2D m_rigidBody;
 	GameObject m_healthBar;
+	List<UnitController> m_targets = new List<UnitController>();
+	float m_currentCooldown;
 
 	void Start()
 	{
@@ -16,7 +20,19 @@ public class EnemyController : MonoBehaviour, HealthBar.Unit
 		m_healthBar = Instantiate(m_healthBarPrefab);
 		m_healthBar.GetComponent<HealthBar>().SetParent(this);
 
-		SetHealthBarActive(false);
+		m_currentCooldown = m_cooldown;
+
+		SetHealthBarActive(true);
+	}
+
+	void LateUpdate()
+	{
+		m_currentCooldown -= Time.deltaTime;
+		if (m_currentCooldown <= 0)
+		{
+			Fire();
+			m_currentCooldown = m_cooldown;
+		}
 	}
 
 	void SetHealthBarActive(bool active)
@@ -34,9 +50,12 @@ public class EnemyController : MonoBehaviour, HealthBar.Unit
 		m_health -= damage;
 		if (m_health <= 0)
 		{
-			Destroy(m_healthBar);
 			Destroy(gameObject);
 		}
+	}
+
+	private void OnDestroy() {
+		Destroy(m_healthBar);
 	}
 
 	public Transform GetTransform()
@@ -46,11 +65,38 @@ public class EnemyController : MonoBehaviour, HealthBar.Unit
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("Enter");
 		if (other.CompareTag("Unit"))
 		{
-			Debug.Log("Comp");
-			Destroy(other.gameObject);
+			AddUnique(m_targets, (UnitController) other.GetComponent<UnitController>());
 		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.CompareTag("Unit"))
+		{
+			m_targets.Remove((UnitController) other.GetComponent<UnitController>());
+		}
+	}
+
+	private void AddUnique<T>(List<T> list, T item)
+	{
+		if (!list.Contains(item))
+		{
+			list.Add(item);
+		}
+	}
+
+	private void Fire()
+	{
+		m_targets.RemoveAll((item) => { return item == null || item.gameObject == null; });
+		if (m_targets.Count == 0)
+		{
+			return;
+		}
+		int random = (int) Mathf.Floor(Random.value * m_targets.Count);
+		UnitController target = m_targets[random];
+		transform.LookAt(target.transform);
+		target.DecreaseHealth(m_damage);
 	}
 }

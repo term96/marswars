@@ -36,12 +36,11 @@ public class HealthBar : MonoBehaviour
 		{
 			return;
 		}
+		int width = (int) (m_width * m_parent.GetHealth() / 100f);
 		Vector3 vec3 = Camera.main.WorldToScreenPoint(m_parent.GetTransform().position);
-		m_position.x = vec3.x - m_width / 2;
+		m_position.x = vec3.x - width / 2;
 		m_position.y = Screen.height - vec3.y - m_verticalOffset;
-		GUIStyle style = new GUIStyle();
-		style.stretchWidth = true;
-		GUI.Box(new Rect(m_position.x, m_position.y, m_width, m_height), m_texture, style);
+		GUI.Box(new Rect(m_position.x, m_position.y, width, m_height), m_texture);
 	}
 
 	public interface Unit

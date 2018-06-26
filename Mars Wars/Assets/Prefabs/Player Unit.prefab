@@ -101,6 +101,8 @@ MonoBehaviour:
     type: 2}
   m_actionsControllerObj: {fileID: 0}
   m_inputControllerObj: {fileID: 0}
+  m_damage: 25
+  m_cooldown: 1
 --- !u!136 &136233267237482750
 CapsuleCollider:
   m_ObjectHideFlags: 1

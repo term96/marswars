@@ -100,6 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_healthBarPrefab: {fileID: 1035076817184114, guid: 91e912a3c3ba24645a7dd9522d49b630,
     type: 2}
+  m_damage: 20
+  m_cooldown: 1
 --- !u!136 &136552865173242336
 CapsuleCollider:
   m_ObjectHideFlags: 1
