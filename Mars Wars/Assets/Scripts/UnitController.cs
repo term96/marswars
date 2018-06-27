@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class UnitController : MonoBehaviour, InputController.ClickListener, ActionsController.DeselectListener, HealthBar.Unit
 {
@@ -16,6 +17,7 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 	GameObject m_healthBar;
 	List<EnemyController> m_targets = new List<EnemyController>();
 	float m_currentCooldown;
+	private NavMeshAgent m_agent;
 
 	void Start()
 	{
@@ -28,7 +30,10 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		m_inputController = m_inputControllerObj.GetComponent<InputController>();
 		m_inputController.AddClickListener(this);
 
-		m_currentCooldown = m_cooldown;
+		m_currentCooldown = 0;
+
+		m_agent = GetComponent<NavMeshAgent>();
+		m_agent.updateRotation = false;
 
 		SetHealthBarActive(false);
 	}
@@ -39,7 +44,11 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		if (m_currentCooldown <= 0)
 		{
 			Fire();
-			m_currentCooldown = m_cooldown;
+		}
+
+		if (!m_agent.isStopped)
+		{
+			LookAt(m_agent.steeringTarget);
 		}
 	}
 
@@ -119,7 +128,17 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		}
 		int random = (int) Mathf.Floor(Random.value * m_targets.Count);
 		EnemyController target = m_targets[random];
-		transform.LookAt(target.transform);
+
+		m_agent.isStopped = true;
+		LookAt(target.transform.position);
 		target.DecreaseHealth(m_damage);
+
+		m_currentCooldown = m_cooldown;
+	}
+
+	void LookAt(Vector3 position)
+	{
+		Vector3 offset = transform.position - position;
+    	transform.LookAt(transform.position + offset, transform.up);
 	}
 }

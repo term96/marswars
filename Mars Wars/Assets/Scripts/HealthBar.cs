@@ -8,7 +8,7 @@ public class HealthBar : MonoBehaviour
 	public float m_verticalOffset;
 	public int m_width;
 	public int m_height;
-	public Texture2D m_texture;
+	public GUIStyle m_style;
 
 	Unit m_parent;
 	Vector2 m_position;
@@ -36,11 +36,10 @@ public class HealthBar : MonoBehaviour
 		{
 			return;
 		}
-		int width = (int) (m_width * m_parent.GetHealth() / 100f);
 		Vector3 vec3 = Camera.main.WorldToScreenPoint(m_parent.GetTransform().position);
-		m_position.x = vec3.x - width / 2;
+		m_position.x = vec3.x - m_width / 2;
 		m_position.y = Screen.height - vec3.y - m_verticalOffset;
-		GUI.Box(new Rect(m_position.x, m_position.y, width, m_height), m_texture);
+		GUI.Box(new Rect(m_position.x, m_position.y, m_width, m_height), ((int) m_parent.GetHealth()).ToString(), m_style);
 	}
 
 	public interface Unit
