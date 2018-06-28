@@ -13,7 +13,6 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 	private ActionsController m_actionsController;
 	private InputController m_inputController;
 	private float m_health = 100f;
-	Rigidbody2D m_rigidBody;
 	GameObject m_healthBar;
 	List<EnemyController> m_targets = new List<EnemyController>();
 	float m_currentCooldown;
@@ -21,7 +20,6 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 
 	void Start()
 	{
-		m_rigidBody = GetComponent<Rigidbody2D>();
 		m_healthBar = Instantiate(m_healthBarPrefab);
 		m_healthBar.GetComponent<HealthBar>().SetParent(this);
 
@@ -59,11 +57,11 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 
 	public void AcceptClickEvent(Vector3 worldPosition, bool uiClick, Transform hitTransform)
 	{
-		if (hitTransform == transform)
-		{
-			m_actionsController.GetComponent<ActionsController>().AddSelectedUnit(gameObject);
-			SetHealthBarActive(true);
-		}
+        if (hitTransform == transform)
+        {
+            m_actionsController.GetComponent<ActionsController>().AddSelectedUnit(gameObject);
+            SetHealthBarActive(true);
+        }
 	}
 
 	public void OnDeselect()
