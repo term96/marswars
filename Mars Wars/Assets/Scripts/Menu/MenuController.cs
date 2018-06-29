@@ -20,6 +20,11 @@ public class MenuController : MonoBehaviour {
         SceneManager.LoadScene("Level1");
     }
 
+    public void PlayLevel2Pressed()
+    {
+        SceneManager.LoadScene("Level2");
+    }
+
     public void ExitPressed()
     {
         Application.Quit();

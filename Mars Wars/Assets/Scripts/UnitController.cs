@@ -17,8 +17,9 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 	List<EnemyController> m_targets = new List<EnemyController>();
 	float m_currentCooldown;
 	private NavMeshAgent m_agent;
+    BaseController m_baseTarget = new BaseController();
 
-	void Start()
+    void Start()
 	{
 		m_healthBar = Instantiate(m_healthBarPrefab);
 		m_healthBar.GetComponent<HealthBar>().SetParent(this);
@@ -83,7 +84,19 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		}
 	}
 
-	public Transform GetTransform()
+    public void IncreaseHealth(float health)
+    {
+        if (m_health < 100)
+        {
+            m_health += health;
+        }
+        else
+        {
+            m_health = 100;
+        }
+    }
+
+    public Transform GetTransform()
 	{
 		return transform;
 	}
@@ -93,13 +106,18 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		Destroy(m_healthBar);
 	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.CompareTag("Enemy"))
-		{
-			AddUnique(m_targets, (EnemyController) other.GetComponent<EnemyController>());
-		}
-	}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            AddUnique(m_targets, (EnemyController)other.GetComponent<EnemyController>());
+        }
+
+        if (other.CompareTag("EnemyBase"))
+        {
+            m_baseTarget = (BaseController)other.GetComponent<BaseController>();
+        }
+    }
 
 	private void OnTriggerExit(Collider other)
 	{
@@ -107,7 +125,12 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 		{
 			m_targets.Remove((EnemyController) other.GetComponent<EnemyController>());
 		}
-	}
+
+        if (other.CompareTag("EnemyBase"))
+        {
+            m_baseTarget = (BaseController)other.GetComponent<BaseController>();
+        }
+    }
 
 	private void AddUnique<T>(List<T> list, T item)
 	{
@@ -119,19 +142,26 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 
 	private void Fire()
 	{
-		m_targets.RemoveAll((item) => { return item == null || item.gameObject == null; });
-		if (m_targets.Count == 0)
-		{
-			return;
-		}
-		int random = (int) Mathf.Floor(Random.value * m_targets.Count);
-		EnemyController target = m_targets[random];
+        if (m_baseTarget != null)
+        {
+            m_baseTarget.DecreaseHealth(m_damage);
+        }
+        else
+        {
+            m_targets.RemoveAll((item) => { return item == null || item.gameObject == null; });
+            if (m_targets.Count == 0)
+            {
+                return;
+            }
+            int random = (int)Mathf.Floor(Random.value * m_targets.Count);
+            EnemyController target = m_targets[random];
 
-		m_agent.isStopped = true;
-		LookAt(target.transform.position);
-		target.DecreaseHealth(m_damage);
+            m_agent.isStopped = true;
+            LookAt(target.transform.position);
+            target.DecreaseHealth(m_damage);
 
-		m_currentCooldown = m_cooldown;
+            m_currentCooldown = m_cooldown;
+        }
 	}
 
 	void LookAt(Vector3 position)
