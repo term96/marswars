@@ -7,13 +7,14 @@ public class BaseController : MonoBehaviour, HealthBar.Unit
 {
     public GameObject m_healthBarPrefab;
     GameObject m_healthBar;
-    private float m_health = 1000f;
+    private float m_health;
 
     // Use this for initialization
     void Start () {
         m_healthBar = Instantiate(m_healthBarPrefab);
         m_healthBar.GetComponent<HealthBar>().SetParent(this);
         SetHealthBarActive(true);
+        m_health = 1000f;
     }
 
 	void Update() {
@@ -32,22 +33,25 @@ public class BaseController : MonoBehaviour, HealthBar.Unit
         {
             if (gameObject.tag == "EnemyBase")
             {
-                Destroy(gameObject.GetComponent<HealthBar>());
-                Destroy(gameObject);
-                SceneManager.LoadScene("PlayerWin", LoadSceneMode.Additive);
+                SceneManager.LoadScene("PlayerWin", LoadSceneMode.Single);
             }
             else
             {
-                Destroy(gameObject.GetComponent<HealthBar>());
-                Destroy(gameObject);
-                SceneManager.LoadScene("BotWin", LoadSceneMode.Additive);
+                SceneManager.LoadScene("BotWin", LoadSceneMode.Single);
             }
         }
     }
 
     public Transform GetTransform()
     {
-        return transform;
+        if (this == null)
+        {
+            return null;
+        }
+        else
+        {
+            return transform;
+        }
     }
 
     void SetHealthBarActive(bool active)

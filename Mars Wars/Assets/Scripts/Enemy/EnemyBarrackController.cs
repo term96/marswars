@@ -25,5 +25,7 @@ public class EnemyBarrackController : MonoBehaviour {
     void generateUnit()
     {
         GameObject obj = Instantiate(prefab, new Vector3(base_pos.x + 5, base_pos.y, base_pos.z), Quaternion.identity) as GameObject;
+        if (obj.tag == "")
+        { }
     }
 }

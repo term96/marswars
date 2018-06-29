@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour, HealthBar.Unit
 	private float m_health = 100f;
 	GameObject m_healthBar;
 	List<UnitController> m_targets = new List<UnitController>();
-    BaseController m_baseTarget = new BaseController();
+    BaseController m_baseTarget;
 	float m_currentCooldown;
 
     private NavMeshAgent m_agent;

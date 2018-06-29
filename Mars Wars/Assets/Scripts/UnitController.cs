@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour, InputController.ClickListener, Acti
 	List<EnemyController> m_targets = new List<EnemyController>();
 	float m_currentCooldown;
 	private NavMeshAgent m_agent;
-    BaseController m_baseTarget = new BaseController();
+    BaseController m_baseTarget;
 
     void Start()
 	{
