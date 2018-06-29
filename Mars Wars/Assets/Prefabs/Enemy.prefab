@@ -39,8 +39,8 @@ GameObject:
   - component: {fileID: 23844295302307378}
   - component: {fileID: 195092059662639306}
   - component: {fileID: 136889288121792324}
-  - component: {fileID: 114483083440796734}
   - component: {fileID: 54385670541798404}
+  - component: {fileID: 114037894467039700}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Enemy
@@ -125,7 +125,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &114483083440796734
+--- !u!114 &114037894467039700
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,13 +133,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1375769618842720}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27b64a28e798fb94a941a06defc7f5df, type: 3}
+  m_Script: {fileID: 11500000, guid: e7c63cd6e5292e24e99d102037277929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_healthBarPrefab: {fileID: 1035076817184114, guid: 91e912a3c3ba24645a7dd9522d49b630,
     type: 2}
-  m_damage: 20
-  m_cooldown: 1
+  m_damage: 10
+  m_cooldown: 2
 --- !u!136 &136552865173242336
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Unit
   - Enemy
+  - PlayerBarrack
+  - EnemyBarrack
+  - PlayerBase
+  - EnemyBase
   layers:
   - Default
   - TransparentFX
